@@ -1,0 +1,9 @@
+### Django ###
+__pycache__/
+
+# virtualenv
+.venv
+
+# dotenv
+.env
+
