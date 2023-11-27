@@ -49,6 +49,7 @@ INSTALLED_APPS += [
 INSTALLED_APPS += [
     "apps.core.apps.CoreConfig",
     "apps.api.apps.ApiConfig",
+    'apps.api_v1.apps.ApiV1Config',
 ]
 
 # ======================================================================================================================
