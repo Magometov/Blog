@@ -85,4 +85,42 @@ def user_registration(request):
     except Exception as e:
         return Response({'detail': 'Internal Server Error'}, status=500)
 
+# ======================================================================================================================
+# Registrations
+# ======================================================================================================================
 
+
+@api_view(['POST'])
+def email_verify_view(request):
+    try:
+        email = request.data['email']
+        user = get_object_or_404(User, email=email)
+        request.session['email'] = email
+        return Response({'detail': 'True'}, status=200)
+    except KeyError as e:
+        return Response({'detail': f'{e} is required!'}, status=422)
+    except Http404:
+        return Response({'detail': 'user not found'}, status=404)
+    except Exception as e:
+        return Response({'detail': 'Internal Server Error'}, status=500)
+
+
+@api_view(['POST'])
+def email_password_verify_view(request):
+    try:
+        if not 'email' in request.session:
+            raise ValidationError
+        user = get_object_or_404(User, email=request.session.get('email'))
+        password = request.data['password']
+        if check_password(password, user.password):
+            return Response({'detail': 'True'}, status=200)
+        else:
+            return Response({'detail': 'False'}, status=403)
+    except ValidationError:
+        return Response({'detail': 'email is not in the session'}, status=409)
+    except KeyError as e:
+        return Response({'detail': f'{e} is required!'}, status=422)
+    except Http404:
+        return Response({'detail': 'user not found'}, status=404)
+    except Exception as e:
+        return Response({'detail': 'Internal Server Error'}, status=500)
