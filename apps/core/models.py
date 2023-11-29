@@ -88,11 +88,10 @@ class Article(DateTimeAbstractModel):
         ordering = ['likes']
 
     title = models.CharField(max_length=1000, verbose_name='Название')
-    title_description = models.CharField(max_length=1000, verbose_name='Описание в заголовке')
+    title_description = models.CharField(max_length=1000, verbose_name='Описание в заголовке', blank=True, default='')
+    content = models.TextField(verbose_name='Содержимое статьи')
     author = models.ForeignKey(User, related_name='author_article', verbose_name='Автор', on_delete=models.SET_NULL,
                                null=True)
-    image = models.FileField(verbose_name='Изображение статьи', null=True, blank=True, upload_to=upload_course,
-                             max_length=300)
     slug = models.SlugField(max_length=200, db_index=True, blank=True, unique=True, verbose_name="URL")
     category = models.ForeignKey(Category, verbose_name='Категория', on_delete=models.SET_NULL, null=True,
                                  blank=True, related_name='articles')
@@ -114,7 +113,7 @@ class Comment(DateTimeAbstractModel):
     user = models.ForeignKey(User, verbose_name='Пользователь', related_name='comments', on_delete=models.SET_NULL,
                              null=True)
     article = models.ForeignKey(Article, verbose_name='Статья', related_name='comments', on_delete=models.SET_NULL,
-                               null=True)
+                                null=True)
     name = models.CharField(max_length=100, verbose_name='Название')
     description = models.TextField(verbose_name='Описание')
 
